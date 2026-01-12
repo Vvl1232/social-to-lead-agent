@@ -1,6 +1,6 @@
 from langgraph.graph import StateGraph
 from agent.state import AgentState
-from agent.intent_classifier import detect_intent
+from agent.intent import detect_intent
 from agent.tools import mock_lead_capture
 from agent.rag import load_rag
 
