@@ -27,7 +27,7 @@ app = load_agent()
 # -------------------------
 if "state" not in st.session_state:
     st.session_state.state = {
-        "messages": [],
+        "messages": [],           # always store dict messages
         "intent": "",
         "name": None,
         "email": None,
@@ -40,12 +40,8 @@ if "state" not in st.session_state:
 # Display Chat History
 # -------------------------
 for msg in st.session_state.state["messages"]:
-    if isinstance(msg, dict):
-        role = msg.get("role", "assistant")
-        content = msg.get("content", "")
-    else:
-        role = "user"
-        content = msg
+    role = msg["role"]
+    content = msg["content"]
 
     with st.chat_message(role):
         st.write(content)
@@ -56,27 +52,26 @@ for msg in st.session_state.state["messages"]:
 user_input = st.chat_input("Type your message...")
 
 if user_input:
+
     if user_input.lower() == "exit":
         st.session_state.clear()
         st.rerun()
 
+    # ---- User message ----
+    user_msg = {"role": "user", "content": user_input}
+    st.session_state.state["messages"].append(user_msg)
 
-    # Show user message
     with st.chat_message("user"):
         st.write(user_input)
 
-    # Update state
-    st.session_state.state["messages"].append(user_input)
-
-    # Invoke agent
+    # ---- Agent invoke ----
     result = app.invoke(st.session_state.state)
 
-    # Critical update
+    # ---- Update global state ----
     st.session_state.state.update(result)
 
-    # Get latest agent message
-    agent_reply = result["messages"][-1]
+    # ---- Agent message ----
+    agent_msg = result["messages"][-1]
 
-    # Show agent message
     with st.chat_message("assistant"):
-        st.write(agent_reply)
+        st.write(agent_msg["content"])
