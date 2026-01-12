@@ -1,7 +1,12 @@
-def detect_intent(user_input: str) -> str:
-    text = user_input.lower()
+def detect_intent(message: dict) -> str:
+    """
+    Detect user intent from a LangChain-style message dict.
+    message format: {"role": "user", "content": "..."}
+    """
 
-    #HIGH INTENT FIRST
+    text = message["content"].lower()
+
+    # HIGH INTENT (check first)
     if any(phrase in text for phrase in [
         "i want",
         "sign up",
@@ -12,7 +17,7 @@ def detect_intent(user_input: str) -> str:
     ]):
         return "high_intent"
 
-    #PRODUCT INQUIRY
+    # PRODUCT / PRICING INQUIRY
     if any(word in text for word in [
         "price",
         "pricing",
@@ -25,6 +30,7 @@ def detect_intent(user_input: str) -> str:
     ]):
         return "product_inquiry"
 
+    # GREETING
     if any(word in text for word in ["hi", "hello", "hey"]):
         return "greeting"
 
