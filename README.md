@@ -1,14 +1,33 @@
-# Social to Lead Agent
+# Social to Lead Agent – AutoStream
 
-A sophisticated AI agent designed to convert social media interactions into qualified leads using advanced natural language processing and graph-based reasoning.
+This project is built as part of the ServiceHive Machine Learning Intern assignment.
+
+The goal of this project is to build an agentic AI system that converts social media conversations into qualified leads.
+
+The agent is designed for a fictional SaaS product called **AutoStream**, which provides automated video editing tools for content creators.
+
+---
 
 ## Features
 
-- **Intent Classification**: Automatically classify user intents from social media messages
-- **RAG System**: Retrieve and generate responses using knowledge base
-- **Graph-based Reasoning**: Model relationships and conversations
-- **Lead Qualification**: Identify and qualify potential leads
-- **Tool Integration**: Connect with various business tools
+- Intent detection (greeting, product inquiry, high intent)
+- RAG-based product and pricing responses using a local knowledge base
+- Multi-turn conversation state management
+- Lead qualification and controlled tool execution
+- Streamlit-based interactive UI
+
+---
+
+## Tech Stack
+
+- Python 3.9+
+- Streamlit
+- LangChain
+- LangGraph (for agent workflow and state management)
+- FAISS (vector search)
+- HuggingFace sentence embeddings
+
+---
 
 ## Installation
 
@@ -18,58 +37,64 @@ git clone https://github.com/Vvl1232/social-to-lead-agent.git
 cd social-to-lead-agent
 ```
 
-2. Create a virtual environment:
-```bash
+2. Create and activate a virtual environment:
+```
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate
 ```
 
 3. Install dependencies:
-```bash
+```
 pip install -r requirements.txt
 ```
 
 ## Usage
 
 Run the Streamlit application:
-```bash
+```
 streamlit run main.py
 ```
 
 ## Project Structure
-
 ```
 social-to-lead-agent/
 │
 ├── agent/
-│   ├── graph.py              # Graph-based reasoning
-│   ├── rag.py                # Retrieval-Augmented Generation
-│   ├── intent.py             # Intent classification
-│   ├── tools.py              # Tool integrations
-│   ├── state.py              # State management
+│   ├── graph.py              # LangGraph agent workflow
+│   ├── rag.py                # RAG pipeline
+│   ├── intent.py             # Intent detection logic
+│   ├── tools.py              # Mock lead capture tool
+│   ├── state.py              # Agent state definition
 │   └── __init__.py
 │
 ├── data/
-│   └── knowledge_base.json   # Knowledge base data
+│   └── knowledge_base.json   # Local product knowledge base
 │
 ├── main.py                   # Streamlit entry point
-├── requirements.txt          # Python dependencies
-├── README.md                 # This file
-├── .gitignore               # Git ignore rules
-└── demo_video.mp4            # Demo video
+├── requirements.txt          # Dependencies
+├── README.md                 # Documentation
+└── .gitignore
 ```
 
-## Demo
+## Architecture Explanation
+```
+This project uses LangGraph to manage the agent’s decision flow and maintain state across multiple conversation turns.
+The agent state stores conversation history, detected intent, user details, and tool execution status.
 
-Watch the demo video: [demo_video.mp4](demo_video.mp4)
+Intent detection is implemented using simple rule-based logic to ensure predictable and controlled behavior.
+When a user asks about pricing or features, the agent uses Retrieval-Augmented Generation (RAG) to retrieve information from a local JSON knowledge base. The data is embedded using HuggingFace embeddings and stored in a FAISS vector store.
 
-## Contributing
+When high intent is detected, the agent enters a lead qualification flow. The agent sequentially collects the user’s name, email, and creator platform. The mock lead capture tool is executed only after all required details are collected, ensuring safe tool usage.
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+## WhatsApp Integration (Concept)
+```
+This agent can be integrated with WhatsApp using a webhook-based architecture.
 
-## License
+Incoming WhatsApp messages would be received via a webhook endpoint and passed to the agent backend.
+The agent’s response would then be sent back to the user using the WhatsApp Business API.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+The same agent logic and state management can be reused without modification.
+```
+
+## Demo Video Submited
