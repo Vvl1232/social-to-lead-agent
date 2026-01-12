@@ -1,7 +1,7 @@
+streamlit
 langchain
-langchain-openai
-langchain-community
 langgraph
+langchain-huggingface
 faiss-cpu
+openai
 python-dotenv
-sentence-transformers
